@@ -1,0 +1,25 @@
+{
+  "name": "vulcan-codingchallengeb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "underscore": "^1.8.3",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nick-Brennan/Vulcan-CodingChallengeB.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nick-Brennan/Vulcan-CodingChallengeB/issues"
+  },
+  "homepage": "https://github.com/Nick-Brennan/Vulcan-CodingChallengeB#readme"
+}
