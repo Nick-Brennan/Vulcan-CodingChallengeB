@@ -13,16 +13,12 @@ app.use(cookieParser());
 app.use("/static", express.static("public"));
 app.use("/vendor", express.static("bower_components"));
 app.use(session({
-	// genid: function(req) {
-	//     return uuid.v1();
- //  	},
 	secret: "notsecure",
 	resave: false,
 	saveUninitialized: true
 }));
 
 app.get('/', function(req, res){
-	console.log(req.sessionID);
 	res.sendFile(views + "main.html");
 });
 
@@ -31,9 +27,7 @@ app.get('/session', function(req, res){
 });
 
 app.get('/player', function(req, res){
-	console.log("why doesn't it work here!? " + req.sessionID);
 	db.Player.find({owner: req.sessionID}, function(err, player){
-		console.log("first up: " + player[0] + " <--anything there?");
 		if(err){console.log(err);}
 
 		if(player[0] === undefined){
@@ -63,25 +57,25 @@ app.get('/player', function(req, res){
 		    newPlayer.wisdom = n6;
 		    newPlayer.owner = req.sessionID;
 
-		    console.log(newPlayer);
-
 		    db.Player.create(newPlayer, function(err, result){
 		    	if(err){
-		    		console.log("here is the ERROR!!!:" + err);
+		    		console.log(err);
 		    	}
-		    	console.log(result);
 		    	res.send(result);
 		    });
 	    }else{
-	    	console.log(player[0]);
 	    	res.send(player[0]);
 	    }
     });
 });
 
+app.get('/players', function(req, res){
+	db.Player.find({owner: {$ne: req.sessionID}, name: {$ne: null}}, function(err, enemies){
+		res.send(enemies);
+	});
+});
+
 app.post('/', function(req, res){
-	console.log("check button pressed");
-	console.log("what's this?: " + req.body.name);
 	db.Player.find({owner: req.sessionID}, function(err, player){
 		if(err){console.log(err);}
 		var playerToUpdate = player[0]
@@ -89,6 +83,62 @@ app.post('/', function(req, res){
 		playerToUpdate.save();
 	});
 	res.redirect('/');
+});
+
+app.post('/fight', function(req, res){
+	db.Player.findOne({owner: req.sessionID}, function(err, user){
+		if(err){console.log(err);}
+		db.Player.findOne({owner: req.body.enemy}, function(err, enemy){
+			var userWins = 0;
+			var enemyWins = 0;
+			var msg = '';
+			var attribArr = ["strength", "agility", "intelligence", "stamina", "charisma", "wisdom"];
+			var prize = attribArr[Math.floor(Math.random() * 6)];
+			if(user.strength > enemy.strength){
+				userWins++;
+			}else if(enemy.strenth > user.strength){
+				enemyWins++; 
+			}
+			if(user.agility > enemy.agility){
+				userWins++;
+			}else if(enemy.agility > user.agility){
+				enemyWins++; 
+			}
+			if(user.intelligence > enemy.intelligence){
+				userWins++;
+			}else if(enemy.inteligence > user.inteligence){
+				enemyWins++; 
+			}
+			if(user.stamina > enemy.stamina){
+				userWins++;
+			}else if(enemy.stamina > user.stamina){
+				enemyWins++; 
+			}
+			if(user.charisma > enemy.charisma){
+				userWins++;
+			}else if(enemy.charisma > user.charisma){
+				enemyWins++; 
+			}
+			if(user.wisdom > enemy.wisdom){
+				userWins++;
+			}else if(enemy.wisdom > user.wisdom){
+				enemyWins++; 
+			}
+
+			if(userWins > enemyWins){
+				msg = "You Win! You gain 1 " + prize + " point!";
+				user[prize]++;
+				user.save();
+			}else if(enemyWins > userWins){
+				msg = "You Lost! Your enemy gained 1 " + prize + " point!";
+				enemy[prize]++;
+				enemy.save();
+			}else{
+				msg = "It's a tie...";
+			}
+			res.send(msg);
+		});
+	});
 });
 
 app.listen(process.env.PORT || 3000, function(){

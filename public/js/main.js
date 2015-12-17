@@ -1,22 +1,12 @@
 $(function(){
 	console.log("jquery running");
-
-	
-
 	getPlayer();
-
+	getOpponents();
 });
 
-function getSessionID(){
-	$.get("/session", function(data){
-		console.log(data);
-		$("#target").html(data);
-	});
-}
 
 function getPlayer(){
 	$.get("/player", function(player){
-		console.log(player);
 		$("#strength").html(player.strength);
 		$("#agility").html(player.agility);
 		$("#intelligence").html(player.intelligence);
@@ -25,4 +15,29 @@ function getPlayer(){
 		$("#wisdom").html(player.wisdom);
 		$("#target").html(player.name || " ");
 	});
+}
+
+function getOpponents(){
+	$.get("/players", function(players){
+		$('#playersPlaceholder').empty();
+		var template = _.template($('#playerListTemplate').html());
+		var playerArr = $.map(players, function(val, ind){
+			return val;
+		});
+		playerArr.forEach(function(enemy){
+			$('#playersPlaceholder').append(template(enemy));
+		});
+	});
+}
+
+function battle(enemyOwnerId){
+	$.ajax({
+		method: "POST",
+		url: "/fight",
+		data: {enemy: enemyOwnerId}
+	})
+	  .done(function(msg){
+	  	alert("Battle Result: " + msg);
+	  	getPlayer();
+	  });
 }
