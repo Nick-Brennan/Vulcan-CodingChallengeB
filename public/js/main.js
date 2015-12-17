@@ -1,5 +1,4 @@
 $(function(){
-	console.log("jquery running");
 	getPlayer();
 	getOpponents();
 });

@@ -4,23 +4,33 @@
 	<title>Vulcan PVP Coding Callenge</title>
 	<script type="text/javascript" src="/vendor/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/vendor/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/static/js/main.js"></script>
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+
 </head>
 <body>
-	<h1>Vulcan PVP Stats Battle</h1>
-	<br>
-	<h2 id="target"></h2>
-	<form action="/" method="POST">
-		<input name="[name]" id="name" placeholder="Give your hero a name!"/>
-		<input type="submit" value="✓"/>
-	</form>
+	<div class="container">
+		<div class="page-header">
+			<h1>Vulcan PVP Stats Battle <small>back-end coding challenge</small></h1>
+		</div>
+		<br>
+		<center>
+			<h1 id="target"></h1>
+			<form action="/" method="POST">
+				<input name="[name]" id="name" class="input-large" placeholder="Give your hero a name!"/>
+				<input type="submit" value="✓" class="btn-success btn-small" />
+			</form>
 
-	<h3>Strength: <span id="strength"></span> - Agility: <span id="agility"></span> - Intelligence: <span id="intelligence"></span> - Stamina: <span id="stamina"></span> - Charisma: <span id="charisma"></span> - Wisdom: <span id="wisdom"></span></h3>
-	<br>
-	<h4>Vaquish Your Foes (click on an enemy to do battle)</h4>
-	<ul id="playersPlaceholder"></ul>
+			<h3 id="stats"><b>Strength:</b> <span id="strength"></span> - <b>Agility:</b> <span id="agility"></span> - <b>Intelligence:</b> <span id="intelligence"></span> - <b>Stamina:</b> <span id="stamina"></span> - <b>Charisma:</b> <span id="charisma"></span> - <b>Wisdom:</b> <span id="wisdom"></span></h3>
+			<br>
+			<h4>Vaquish Your Foes (click on an enemy to do battle)</h4>
+			<ul id="playersPlaceholder" class="list-group"></ul>
+		</center>
+	</div>
 	<script type="text/template" id="playerListTemplate">
-		<li><button onclick="battle('<%=owner%>')"><%=name%></button></li>
+		<li class="list-group-item"><button onclick="battle('<%=owner%>')" class="btn btn-link foe"><%=name%></button></li>
 	</script>
 </body>
 </html>

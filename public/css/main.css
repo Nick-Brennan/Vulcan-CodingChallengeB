@@ -1,0 +1,16 @@
+.list-group-item{
+	padding: 2px;
+	margin: 2px;
+}
+.foe{
+	font-size: 150%;
+	margin: 0px;
+	padding: 0px;
+}
+#stats{
+	padding: 15px;
+	background-color: rgba(121, 210, 158, 0.5);
+}
+#strength, #agility, #intelligence, #stamina, #charisma, #wisdom{
+	color: red;
+}
