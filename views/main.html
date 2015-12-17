@@ -2,8 +2,25 @@
 <html>
 <head>
 	<title>Vulcan PVP Coding Callenge</title>
+	<script type="text/javascript" src="/vendor/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/vendor/underscore/underscore-min.js"></script>
+	<script src="/static/js/main.js"></script>
 </head>
 <body>
-	<h1>Basic Express Running</h1>
+	<h1>Vulcan PVP Stats Battle</h1>
+	<br>
+	<h2 id="target"></h2>
+	<form action="/" method="POST">
+		<input name="[name]" id="name" placeholder="Give your hero a name!"/>
+		<input type="submit" value="✓"/>
+	</form>
+
+	<h3>Strength: <span id="strength"></span> - Agility: <span id="agility"></span> - Intelligence: <span id="intelligence"></span> - Stamina: <span id="stamina"></span> - Charisma: <span id="charisma"></span> - Wisdom: <span id="wisdom"></span></h3>
+	<br>
+	<h4>Vaquish Your Foes (click on an enemy to do battle)</h4>
+	<ul id="playersPlaceholder"></ul>
+	<script type="text/template" id="playerListTemplate">
+		<li><button onclick="battle('<%=owner%>')"><%=name%></button></li>
+	</script>
 </body>
 </html>
