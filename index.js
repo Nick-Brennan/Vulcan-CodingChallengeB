@@ -8,7 +8,6 @@ var app = express();
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
-var uuid = require("uuid");
 var path = require("path");
 var views = path.join(process.cwd(), "views/");
 var db = require("./models");
