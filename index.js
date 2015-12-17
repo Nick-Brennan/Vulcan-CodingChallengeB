@@ -1,3 +1,8 @@
+
+////////////////////////////////
+///// Server Config ////////////
+////////////////////////////////
+
 var express = require("express");
 var app = express();
 var session = require("express-session");
@@ -18,6 +23,10 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+///////////////////////////////
+//////// Routes ///////////////
+///////////////////////////////
+
 app.get('/', function(req, res){
 	res.sendFile(views + "main.html");
 });
@@ -29,6 +38,8 @@ app.get('/session', function(req, res){
 app.get('/player', function(req, res){
 	db.Player.find({owner: req.sessionID}, function(err, player){
 		if(err){console.log(err);}
+
+     // Initializing New Users's Player with randomly genereated attribute values totaling 80 ////////		
 
 		if(player[0] === undefined){
 			var newPlayer = {};
@@ -55,7 +66,7 @@ app.get('/player', function(req, res){
 		    newPlayer.stamina = n4;
 		    newPlayer.charisma = n5;
 		    newPlayer.wisdom = n6;
-		    newPlayer.owner = req.sessionID;
+		    newPlayer.owner = req.sessionID; //tying the new user's character to the session ID (w/ log-in would use User ID)//
 
 		    db.Player.create(newPlayer, function(err, result){
 		    	if(err){
@@ -89,41 +100,64 @@ app.post('/fight', function(req, res){
 	db.Player.findOne({owner: req.sessionID}, function(err, user){
 		if(err){console.log(err);}
 		db.Player.findOne({owner: req.body.enemy}, function(err, enemy){
+			if(err){console.log(err);}
+		//logic for scoring rounds and awarding a random attribute point to the winner///////////
 			var userWins = 0;
 			var enemyWins = 0;
 			var msg = '';
 			var attribArr = ["strength", "agility", "intelligence", "stamina", "charisma", "wisdom"];
 			var prize = attribArr[Math.floor(Math.random() * 6)];
+
 			if(user.strength > enemy.strength){
 				userWins++;
-			}else if(enemy.strenth > user.strength){
+			}
+
+			if(enemy.strength > user.strength){
 				enemyWins++; 
 			}
+
 			if(user.agility > enemy.agility){
 				userWins++;
-			}else if(enemy.agility > user.agility){
+			}
+
+			if(enemy.agility > user.agility){
 				enemyWins++; 
 			}
+
 			if(user.intelligence > enemy.intelligence){
 				userWins++;
-			}else if(enemy.inteligence > user.inteligence){
+			}
+
+			if(enemy.inteligence > user.inteligence){
 				enemyWins++; 
 			}
+
 			if(user.stamina > enemy.stamina){
 				userWins++;
-			}else if(enemy.stamina > user.stamina){
+			}
+
+			if(enemy.stamina > user.stamina){
 				enemyWins++; 
 			}
+
 			if(user.charisma > enemy.charisma){
 				userWins++;
-			}else if(enemy.charisma > user.charisma){
+			}
+
+			if(enemy.charisma > user.charisma){
 				enemyWins++; 
 			}
+
 			if(user.wisdom > enemy.wisdom){
 				userWins++;
-			}else if(enemy.wisdom > user.wisdom){
+			}
+
+			if(enemy.wisdom > user.wisdom){
 				enemyWins++; 
 			}
+
+			console.log("user wins : " + userWins);
+			console.log("enemy wins : " + enemyWins);
 
 			if(userWins > enemyWins){
 				msg = "You Win! You gain 1 " + prize + " point!";
@@ -140,7 +174,7 @@ app.post('/fight', function(req, res){
 		});
 	});
 });
-
+//Server initialization////////////////////////////////////////////////////////
 app.listen(process.env.PORT || 3000, function(){
 	console.log("PVP Game is running on port: " + (process.env.PORT || 3000));
 });
